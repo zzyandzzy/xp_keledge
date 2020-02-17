@@ -15,7 +15,7 @@ adb logcat | grep "可知: result"
 
 ![cmd](https://github.com/zzyandzzy/xp_keledge/raw/master/images/1.png)
 
-复制这串加密代码，停止抓包，打开会有一个请求Url结尾为：`/transfer/aqr/AuthorizeForApp`的包，保存这个包的响应。
+复制这串加密代码，停止抓包，打开抓包工具会有一个请求Url结尾为：`/transfer/aqr/AuthorizeForApp`的包，保存这个包的响应。
 
 写一个简单的Python代码得到Key
 
