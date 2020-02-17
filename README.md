@@ -14,28 +14,28 @@
 adb logcat | grep "可知: result"
 ```
 
-开始抓包，打开可知APP，点在线阅读（pdf版），等书籍打开后会看到控制台输出了类似下图的加密代码：
+开始抓包，打开可知APP，点在线阅读（pdf版），等书籍打开后会看到控制台输出了类似下图16位的密钥：
 
 ![cmd](https://github.com/zzyandzzy/xp_keledge/raw/master/images/1.png)
 
 复制这串加密代码，停止抓包，打开抓包工具会有一个请求Url结尾为：`/transfer/aqr/AuthorizeForApp`的包，保存这个包的响应。
 
-写一个简单的Python代码得到Key
+写一个简单的Python代码把密钥转换为10进制
 
 ```python
 hex_ascii_key = ''
-for i in '你得到的加密代码':
+for i in '你得到的16位的密钥':
     hex_ascii_key += f'{ord(i):x}'
 print(hex_ascii_key)
 ```
 
 复制结果。
 
-第三步，先测试下Key能不能用，在原来抓包的响应中返回的是json数据，在root->Data->SplitFileUrls里面随便复制一个Url，到浏览器下载并重命名为encode.pdf（这是加密的pdf）
+第三步，先测试下10进制密钥能不能用，在原来抓包的响应中返回的是json数据，在root->Data->SplitFileUrls里面随便复制一个Url，到浏览器下载并重命名为encode.pdf（这是加密的pdf）
 输入：
 
 ```
-openssl enc -d -aes-128-ecb -K 你的Key -in encode.pdf -out decode.pdf
+openssl enc -d -aes-128-ecb -K 你的10进制密钥 -in encode.pdf -out decode.pdf
 ```
 
 看看decode.pdf能不能打开，如果能打开说明解密成功，继续下一步，下载整个pdf。
@@ -117,7 +117,7 @@ pip install
 安装好环境后再运行：
 
 ```
-python download.py -k 你的Key -n 文件名
+python download.py -k 你的10进制密钥 -n 文件名
 ```
 
 等待下载并合成完毕。。。
