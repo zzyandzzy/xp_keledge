@@ -2,6 +2,9 @@
 基于Xposed的可知pdf下载
 因为目前可知改变了加密方式，为了获取加密后的密匙，就使用了Xposed这个神器
 
+# 免责声明
+请自觉遵守法律法规，本脚本仅供学习参考，所有下载的**PDF**请在**24小时**内删除，请勿传播，一切法律责任由用户自己承担，与本人无关
+
 # 使用方法
 第一步：安装可知APP，安装[Xposed](https://github.com/rovo89/Xposed) / [Ed Xposed](https://github.com/ElderDrivers/EdXposed) / [太极](https://taichi.cool/zh/)，太极最好激活**太极阳**模式（因为**太极阴**模式我没测试），下载[可知密匙](https://github.com/zzyandzzy/xp_keledge/raw/master/app/release/app-release.apk)，激活**可知密匙**（太极如果不能激活请授权[无极码](https://taichi.cool/zh/doc/how-to-debug.html)），安装一个顺手的抓包工具，比如：[HttpCanary](https://github.com/MegatronKing/HttpCanary)
 
