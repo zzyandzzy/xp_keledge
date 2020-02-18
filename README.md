@@ -29,7 +29,7 @@ for i in '你得到的16位的密钥':
 print(hex_ascii_key)
 ```
 
-复制结果。
+复制10进制密匙。
 
 第三步，先测试下10进制密钥能不能用，在原来抓包的响应中返回的是json数据，在root->Data->SplitFileUrls里面随便复制一个Url，到浏览器下载并重命名为encode.pdf（这是加密的pdf）
 输入：
@@ -55,11 +55,10 @@ PyPDF2==1.26.0
 ```python
 import os
 import json
-import uuid
 import argparse
 import requests
 import progressbar
-from PyPDF2 import PdfFileMerger, PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfFileMerger
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-k', '--key', dest='key', help="input the key")
@@ -70,6 +69,10 @@ if args.key == None or args.name == None:
     parser.print_help()
     os._exit(0)
 
+hex_ascii_key = ''
+for i in args.key:
+    hex_ascii_key += f'{ord(i):x}'
+
 try:
     with open('res.json', 'r') as f:
         data = json.load(f)
@@ -77,20 +80,34 @@ except Exception as e:
     print(e)
 
 bookurls = data['Data']['SplitFileUrls']
-uuid_str = uuid.uuid4()
-tmp_dir = 'download_%s' % uuid_str
-os.system(f'mkdir {tmp_dir}')
+tmp_dir = 'download_%s' % args.name
+tmp_index = 0
+if not os.path.exists(tmp_dir):
+    os.system(f'mkdir {tmp_dir}')
+else:
+    file_type = ".pdf"
+    lst = []
+    for root, dirs, files in os.walk(tmp_dir):
+        for file in files:
+            if file_type == '':
+                lst.append(file)
+            else:
+                if os.path.splitext(file)[1] == str(file_type):
+                    lst.append(file)
+    tmp_index = lst.__len__()
+    print("pass " + str(tmp_index) + " pages")
 
 p = progressbar.ProgressBar()
 for url in p(bookurls):
     page = bookurls.index(url) + 1
-    filename = f"x-{page}"
-    r = requests.get(url=url, stream=True)
-    with open(tmp_dir + '/' + filename + '.aes', 'wb') as f:
-        f.write(r.content)
-    os.system(
-        f'openssl enc -d -aes-128-ecb -K {args.key} -in {tmp_dir}/{filename}.aes -out {tmp_dir}/{filename}.pdf')
-    os.system(f'rm {tmp_dir}/*.aes')
+    if page > tmp_index:
+        filename = f"x-{page}"
+        r = requests.get(url=url, stream=True)
+        with open(tmp_dir + '/' + filename + '.aes', 'wb') as f:
+            f.write(r.content)
+        os.system(
+            f'openssl enc -d -aes-128-ecb -K {hex_ascii_key} -in {tmp_dir}/{filename}.aes -out {tmp_dir}/{filename}.pdf')
+        os.system(f'rm {tmp_dir}/*.aes')
 
 print("Synthesizing PDF file.........")
 for root, dirs, files in os.walk(tmp_dir):
@@ -117,9 +134,9 @@ pip install
 安装好环境后再运行：
 
 ```
-python download.py -k 你的10进制密钥 -n 文件名
+python download.py -k 你的密钥(不是10进制密匙) -n 文件名(不用加pdf)
 ```
 
-等待下载并合成完毕。。。
+等待下载并合成完毕，如果下载没有反应请结束重来，脚本会跳过之前已下载完成的。
 
 至于为什么那么麻烦，因为我懒。。。
