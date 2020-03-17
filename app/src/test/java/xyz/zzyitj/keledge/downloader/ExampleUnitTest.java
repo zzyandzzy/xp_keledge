@@ -1,4 +1,4 @@
-package xyz.zzyitj.keledge;
+package xyz.zzyitj.keledge.downloader;
 
 import org.junit.Test;
 

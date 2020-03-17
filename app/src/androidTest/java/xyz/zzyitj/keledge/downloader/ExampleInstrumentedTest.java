@@ -1,4 +1,4 @@
-package xyz.zzyitj.keledge;
+package xyz.zzyitj.keledge.downloader;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("xyz.zzyitj.keledge", appContext.getPackageName());
+        assertEquals("xyz.zzyitj.keledge.downloader", appContext.getPackageName());
     }
 }

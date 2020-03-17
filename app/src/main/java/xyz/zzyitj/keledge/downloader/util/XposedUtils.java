@@ -1,4 +1,4 @@
-package xyz.zzyitj.keledge.util;
+package xyz.zzyitj.keledge.downloader.util;
 
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
